@@ -69,3 +69,89 @@ test('читаемая запись без лишних членов и отри
   assert.equal(format(-0), '0');
   assert.equal(format(1e-10), '1e−10');
 });
+
+const { solveBiquadratic, solveEquation, formatAnswer } = require('../dist/solver.js');
+const biCases = [
+  ['четыре действительных', [1, -5, 4], [[-2, 0, 1], [-1, 0, 1], [1, 0, 1], [2, 0, 1]]],
+  ['действительные и мнимые', [1, 0, -16], [[-2, 0, 1], [0, -2, 1], [0, 2, 1], [2, 0, 1]]],
+  ['четыре мнимых', [1, 5, 4], [[0, -2, 1], [0, -1, 1], [0, 1, 1], [0, 2, 1]]],
+  ['четыре комплексных', [1, 0, 1], [[-Math.SQRT1_2, -Math.SQRT1_2, 1], [-Math.SQRT1_2, Math.SQRT1_2, 1], [Math.SQRT1_2, -Math.SQRT1_2, 1], [Math.SQRT1_2, Math.SQRT1_2, 1]]],
+  ['два двойных', [1, -2, 1], [[-1, 0, 2], [1, 0, 2]]],
+  ['два мнимых двойных', [1, 2, 1], [[0, -1, 2], [0, 1, 2]]],
+  ['нулевой четверной', [3, 0, 0], [[0, 0, 4]]],
+  ['нулевой двойной и два простых', [1, -4, 0], [[-2, 0, 1], [0, 0, 2], [2, 0, 1]]],
+  ['нулевой двойной и два мнимых', [1, 4, 0], [[0, -2, 1], [0, 0, 2], [0, 2, 1]]],
+  ['вырождение в квадратное', [0, 2, -8], [[-2, 0, 1], [2, 0, 1]]],
+  ['вырождение в мнимые', [0, 2, 8], [[0, -2, 1], [0, 2, 1]]],
+  ['вырождение в нулевой двойной', [0, 2, 0], [[0, 0, 2]]],
+  ['отрицательный старший коэффициент', [-1, 5, -4], [[-2, 0, 1], [-1, 0, 1], [1, 0, 1], [2, 0, 1]]],
+  ['тождество', [0, 0, 0], []],
+  ['нет решений', [0, 0, 2], []]
+];
+for (const [name, coefficients, expected] of biCases) {
+  test(`биквадратное: ${name}`, () => {
+    const result = solveBiquadratic(...coefficients);
+    assert.equal(result.solutions.length, expected.length);
+    result.solutions.forEach((z, i) => {
+      const [real, imaginary, multiplicity] = expected[i];
+      assert.ok(Math.abs(z.real - real) < 1e-12);
+      assert.ok(Math.abs(z.imaginary - imaginary) < 1e-12);
+      assert.equal(z.multiplicity, multiplicity);
+      assert.ok(!Object.is(z.real, -0) && !Object.is(z.imaginary, -0));
+    });
+    assert.equal(result.solutions.reduce((sum, z) => sum + z.multiplicity, 0), result.degree);
+    assert.deepEqual(result.roots, expected.filter(z => z[1] === 0).map(z => z[0]));
+  });
+}
+
+test('критические точки и чётность биквадратного графика', () => {
+  const result = solveBiquadratic(1, -5, 4);
+  assert.equal(result.symmetry, 0);
+  assert.equal(result.criticalPoints.length, 3);
+  for (const point of result.criticalPoints) {
+    assert.ok(Math.abs(4 * point.x ** 3 - 10 * point.x) < 1e-12);
+    assert.ok(Math.abs(evaluate(result, point.x) - point.y) < 1e-12);
+  }
+  for (const x of [.1, .7, 2, 10]) assert.equal(evaluate(result, x), evaluate(result, -x));
+  assert.equal(solveBiquadratic(1, 5, 4).criticalPoints.length, 1);
+});
+
+test('подстановка всех комплексных корней в исходный многочлен на разных масштабах', () => {
+  const multiply = (u, v) => [u[0] * v[0] - u[1] * v[1], u[0] * v[1] + u[1] * v[0]];
+  const values = [-1e12, -1e6, -1, -1e-6, -1e-12, 0, 1e-12, 1e-6, 1, 1e6, 1e12];
+  for (const a of values) for (const b of values) for (const c of values) {
+    const result = solveBiquadratic(a, b, c);
+    assert.equal(result.solutions.reduce((sum, z) => sum + z.multiplicity, 0), result.degree);
+    for (const z of result.solutions) {
+      const squared = multiply([z.real, z.imaginary], [z.real, z.imaginary]);
+      const fourth = multiply(squared, squared);
+      const residual = Math.hypot(a * fourth[0] + b * squared[0] + c, a * fourth[1] + b * squared[1]);
+      const radius = Math.hypot(z.real, z.imaginary);
+      const scale = Math.abs(a) * radius ** 4 + Math.abs(b) * radius ** 2 + Math.abs(c);
+      assert.ok(Number.isFinite(residual) && residual <= Math.max(scale, Number.MIN_VALUE) * 2e-12, `${a}, ${b}, ${c}: ${JSON.stringify(z)}`);
+    }
+  }
+});
+
+test('близкие корни не объединяются; маленький ненулевой корень не теряется', () => {
+  assert.equal(solveBiquadratic(1, -2, 1 - 1e-14).solutions.length, 4);
+  assert.equal(solveBiquadratic(1, -2, 1 + 1e-14).kind, 'complex');
+  const result = solveBiquadratic(1e-12, -1e12, 1e-12);
+  assert.equal(result.roots.length, 4);
+  assert.ok(Math.abs(result.roots[2] / 1e-12 - 1) < 1e-12);
+  assert.ok(Math.abs(result.roots[3] / 1e12 - 1) < 1e-12);
+});
+
+test('формат двух знаков, степени и совместимость квадратного режима', () => {
+  assert.equal(formatAnswer(Math.sqrt(2)), '1,41');
+  assert.equal(formatAnswer(-0), '0');
+  assert.equal(formatAnswer(1e-12), '1e−12');
+  assert.equal(formatAnswer(-1e12), '−1e12');
+  assert.equal(polynomial(1, -5, 4, 'biquadratic'), 'x⁴ − 5x² + 4');
+  assert.equal(polynomial(1, -5, 4, 'reduced'), 't² − 5t + 4');
+  assert.deepEqual(solveEquation(1, -3, -4, 'quadratic').roots, [-1, 4]);
+  assert.equal(solveEquation(0, 0, 0).kind, 'identity');
+  assert.equal(solveEquation(0, 0, 1).kind, 'constant');
+  assert.throws(() => solveEquation(1, 2, 3, 'unknown'));
+  for (const bad of [NaN, Infinity, 1e13, 1e-13]) assert.throws(() => solveBiquadratic(1, bad, 1));
+});
