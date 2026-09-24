@@ -66,7 +66,7 @@ button:active:not(:disabled) {
   color:var(--blue)
 }
 .header-note {
-  font-size:14px;
+  font-size:16px;
   color:var(--muted)
 }
 main {
@@ -82,8 +82,8 @@ main {
   margin-bottom:30px
 }
 .eyebrow,.tiny-label {
-  font-size:12px;
-  letter-spacing:1.3px;
+  font-size:16px;
+  letter-spacing:.7px;
   font-weight:650;
   color:var(--muted)
 }
@@ -108,9 +108,9 @@ h1 {
 }
 .workspace {
   display:grid;
-  grid-template-columns:350px minmax(0,1fr);
+  grid-template-columns:390px minmax(0,1fr);
   gap:22px;
-  align-items:stretch
+  align-items:start
 }
 .panel {
   border:1px solid var(--border);
@@ -136,13 +136,13 @@ h2 {
   margin:0
 }
 .step-label {
-  font-size:12px;
+  font-size:16px;
   font-variant-numeric:tabular-nums;
   color:#8995a7
 }
 .muted {
   color:var(--muted);
-  font-size:14px;
+  font-size:16px;
   line-height:1.6;
   margin:8px 0 20px
 }
@@ -155,7 +155,7 @@ h2 {
   min-width:0
 }
 .coefficient-name {
-  font:italic 21px Georgia,serif;
+  font:18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   display:block;
   margin:0 0 8px;
   color:#54647e
@@ -181,7 +181,7 @@ h2 {
   border-color:#bc3939
 }
 .input-hint {
-  font-size:12px;
+  font-size:16px;
   line-height:1.6;
   color:var(--muted);
   margin:10px 0 21px
@@ -194,7 +194,7 @@ h2 {
   text-align:center
 }
 .equation-box .tiny-label {
-  font-size:12px
+  font-size:16px
 }
 .math {
   font-family:Georgia,"Times New Roman",serif;
@@ -216,7 +216,7 @@ h2 {
   display:flex;
   justify-content:space-between;
   align-items:center;
-  font-size:14px;
+  font-size:16px;
   font-weight:600;
   box-shadow:0 4px 10px #2751e818
 }
@@ -236,7 +236,7 @@ h2 {
   margin-top:10px
 }
 .examples button {
-  font-size:14px;
+  font-size:16px;
   color:#52617a;
   border:1px solid var(--border);
   border-radius:6px;
@@ -260,7 +260,7 @@ h2 {
 .badge {
   background:#edf2ff;
   color:#2751c8;
-  font-size:12px;
+  font-size:16px;
   border-radius:5px;
   padding:5px 8px
 }
@@ -283,7 +283,7 @@ h2 {
 }
 .root-value {
   display:block;
-  font:30px Georgia,serif;
+  font:28px Georgia,serif;
   color:var(--blue);
   overflow-wrap:anywhere
 }
@@ -295,7 +295,7 @@ h2 {
 }
 .error {
   color:#a52727;
-  font-size:14px;
+  font-size:16px;
   line-height:1.5
 }
 .graph-panel {
@@ -335,8 +335,8 @@ h2 {
   border-right:1px solid var(--border);
   font-size:23px;
   color:#52617a;
-  width:36px;
-  height:36px
+  width:44px;
+  height:44px
 }
 .graph-actions button:last-child {
   border:0
@@ -376,7 +376,7 @@ h2 {
   flex-wrap:wrap;
   gap:24px;
   color:var(--muted);
-  font-size:12px;
+  font-size:16px;
   margin:4px 0 22px
 }
 .graph-legend span {
@@ -415,18 +415,18 @@ h2 {
   min-width:0
 }
 .graph-facts .tiny-label {
-  font-size:12px;
+  font-size:16px;
   letter-spacing:1px;
   display:block;
   margin-bottom:9px
 }
 .graph-facts strong {
-  font-size:14px;
+  font-size:16px;
   font-weight:550;
   overflow-wrap:anywhere
 }
 .graph-note {
-  font-size:12px;
+  font-size:16px;
   color:var(--muted);
   line-height:1.5;
   margin:0
@@ -447,7 +447,7 @@ h2 {
   min-width:0
 }
 .step-title {
-  font-size:14px;
+  font-size:16px;
   font-weight:550;
   margin:0 0 10px
 }
@@ -457,7 +457,7 @@ h2 {
   margin:0
 }
 .step p:last-child:not(.math) {
-  font-size:13px;
+  font-size:16px;
   color:var(--muted);
   line-height:1.6;
   margin:7px 0 0
@@ -466,7 +466,7 @@ footer {
   display:flex;
   justify-content:space-between;
   gap:20px;
-  font-size:12px;
+  font-size:16px;
   color:#7a879a;
   padding:27px 0 25px;
   line-height:1.6
@@ -477,11 +477,11 @@ footer {
 }
 #plot .tick {
   fill:#8693a7;
-  font-size:12px
+  font-size:16px
 }
 #plot .root-text {
   fill:#244ac8;
-  font-size:13px;
+  font-size:16px;
   font-weight:600;
   paint-order:stroke;
   stroke:#fff;
@@ -490,7 +490,7 @@ footer {
 }
 #plot .axis-label {
   fill:#62738d;
-  font-size:14px;
+  font-size:16px;
   font-style:italic
 }
 @media(min-width:1500px) {
@@ -528,7 +528,7 @@ footer {
     font-size:18px
   }
 }
-@media(max-width:760px) {
+@media(max-width:860px) {
   .site-header {
     height:72px;
     padding:0 20px
@@ -586,11 +586,11 @@ footer {
     grid-column:auto
   }
   .graph-facts .tiny-label {
-    font-size:12px;
+    font-size:16px;
     letter-spacing:.5px
   }
   .graph-facts strong {
-    font-size:13px
+    font-size:16px
   }
   .steps {
     grid-template-columns:1fr;
@@ -616,4 +616,37 @@ footer {
   button {
     transition:none
   }
+}
+
+/* Version 2: equation modes, four roots and readable mobile controls. */
+.mode-switch { display:flex; gap:8px; flex-wrap:wrap; margin:-4px 0 24px; }
+.mode-switch button { border:1px solid var(--border); border-radius:12px; background:#fff; color:var(--muted); padding:13px 18px; font-size:17px; min-height:48px; }
+.mode-switch button[aria-pressed=true] { background:var(--blue); border-color:var(--blue); color:#fff; }
+.root-parts { display:block; margin-top:12px; color:#526483; font-size:16px; line-height:1.6; overflow-wrap:anywhere; }
+.root-label { font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.5; }
+.graph-facts { grid-template-columns:1fr 1fr; }
+.graph-facts>div:first-child { grid-column:1/-1; }
+.graph-facts strong { line-height:1.7; }
+.step .math { white-space:pre-line; overflow-wrap:anywhere; }
+.examples button { min-height:44px; }
+.intro-formula { overflow-wrap:anywhere; text-align:right; }
+@media(max-width:1000px) and (min-width:861px) {
+  .workspace { grid-template-columns:360px minmax(0,1fr); }
+  .graph-heading { flex-wrap:wrap; }
+  .steps { grid-template-columns:1fr; }
+}
+@media(max-width:860px) {
+  .intro-formula { display:none; }
+  .graph-facts { grid-template-columns:1fr 1fr; }
+  .graph-facts>div:first-child { grid-column:1/-1; }
+  .graph-facts>div:last-child { grid-column:auto; }
+  .plot-wrap { height:380px; }
+  .mode-switch button { flex:1; font-size:16px; padding:12px; }
+}
+@media(max-width:430px) {
+  .graph-heading { flex-wrap:wrap; }
+  .graph-actions { margin-top:8px; }
+  h1 { font-size:27px; }
+  .controls { padding:20px; }
+  .root-value { font-size:25px; }
 }
