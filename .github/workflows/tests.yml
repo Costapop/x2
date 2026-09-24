@@ -1,0 +1,22 @@
+name: Проверка приложения
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Проверить синтаксис JavaScript
+        run: |
+          node --check dist/solver.js
+          node --check dist/app.js
+      - name: Проверить математику
+        run: node --test tests/solver.test.cjs
