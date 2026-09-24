@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Решение квадратных уравнений с объяснением, корнями и интерактивным графиком параболы. Работает без интернета.">
+  <meta name="color-scheme" content="light">
+  <title>Парабола — квадратные уравнения</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%232751e8'/%3E%3Cpath d='M8 10Q20 48 32 10' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="solver.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Парабола — главная">
+      <svg width="36" height="36" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="currentColor"/><path d="M9 10Q20 46 31 10" fill="none" stroke="white" stroke-width="2.6"/></svg>
+      <span>парабола<span class="brand-dot">.</span></span>
+    </a>
+    <span class="header-note">Математика, которую видно</span>
+  </header>
+  <main>
+    <div class="intro">
+      <div><p class="eyebrow">АЛГЕБРА / СТЕПЕНЬ 2</p><h1>Квадратное уравнение</h1></div>
+      <p class="intro-formula"><i>a</i>x² + <i>b</i>x + <i>c</i> = 0</p>
+    </div>
+    <div class="workspace">
+      <section class="panel controls" aria-labelledby="input-title">
+        <div class="section-heading"><h2 id="input-title">Коэффициенты</h2><span class="step-label">01</span></div>
+        <p class="muted">Измените числа — решение обновится.</p>
+        <form id="coefficients" novalidate>
+          <div class="coefficient-grid">
+            <label><span class="coefficient-name">a</span><input id="a" name="a" value="1" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-describedby="input-hint input-error" aria-label="Коэффициент a"></label>
+            <label><span class="coefficient-name">b</span><input id="b" name="b" value="-3" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-describedby="input-hint input-error" aria-label="Коэффициент b"></label>
+            <label><span class="coefficient-name">c</span><input id="c" name="c" value="-4" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-describedby="input-hint input-error" aria-label="Коэффициент c"></label>
+          </div>
+          <p id="input-hint" class="input-hint">Дроби можно вводить с точкой или запятой.</p>
+          <p id="input-error" class="error" role="alert" hidden></p>
+          <div class="equation-box"><span class="tiny-label">ВАШЕ УРАВНЕНИЕ</span><p id="equation" class="math">x² − 3x − 4 = 0</p></div>
+          <button class="primary-button" type="submit">Решить уравнение <span aria-hidden="true">↗</span></button>
+        </form>
+        <div class="example-area"><span class="tiny-label">ПОПРОБУЙТЕ ПРИМЕР</span><div class="examples" aria-label="Примеры уравнений">
+          <button type="button" data-example="1,-3,-4">Два корня</button><button type="button" data-example="1,-4,4">Один корень</button><button type="button" data-example="1,0,2">Нет корней ℝ</button>
+        </div></div>
+        <div id="solution" class="solution" aria-live="polite" aria-atomic="true">
+          <div class="section-heading"><h2>Решение</h2><span id="result-badge" class="badge">D &gt; 0</span></div>
+          <p id="result-description" class="muted">Два действительных корня</p>
+          <div id="roots" class="roots"></div>
+        </div>
+      </section>
+      <section class="panel graph-panel" aria-labelledby="graph-title">
+        <div class="graph-heading"><div><div class="section-heading"><h2 id="graph-title">График функции</h2><span class="step-label">02</span></div><p id="function-label" class="function-label">y = x² − 3x − 4</p></div>
+          <div class="graph-actions" aria-label="Масштаб графика"><button id="zoom-in" type="button" aria-label="Приблизить график" title="Приблизить">+</button><button id="zoom-out" type="button" aria-label="Отдалить график" title="Отдалить">−</button><button id="fit" type="button" aria-label="Показать график целиком" title="Показать целиком"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m10-4v4h-4"/></svg></button></div>
+        </div>
+        <div class="plot-wrap" id="plot-wrap"><svg id="plot" role="img" aria-labelledby="plot-title plot-description"></svg><div id="graph-empty" class="graph-empty" hidden>Введите коэффициенты,<br>чтобы построить график.</div></div>
+        <div class="graph-legend"><span><i class="legend-line"></i> Функция</span><span><i class="legend-root"></i> Корни</span><span><i class="legend-vertex"></i> Вершина</span></div>
+        <div class="graph-facts"><div><span class="tiny-label">ВЕРШИНА</span><strong id="vertex">(1,5; −6,25)</strong></div><div><span class="tiny-label">ОСЬ СИММЕТРИИ</span><strong id="symmetry">x = 1,5</strong></div><div><span class="tiny-label">ВЕТВИ</span><strong id="direction">Направлены вверх</strong></div></div>
+        <p id="graph-note" class="graph-note">Корни — точки пересечения графика с осью x.</p>
+      </section>
+    </div>
+    <section class="panel explanation" aria-labelledby="steps-title"><div class="section-heading"><h2 id="steps-title">Как получилось решение</h2><span class="step-label">03</span></div><div id="steps" class="steps"></div></section>
+    <footer><span>Парабола · Лаборатория уравнений</span><span>Все вычисления выполняются на вашем устройстве</span></footer>
+    <noscript>Включите JavaScript в браузере, чтобы решать уравнения и строить графики.</noscript>
+  </main>
+</body>
+</html>
